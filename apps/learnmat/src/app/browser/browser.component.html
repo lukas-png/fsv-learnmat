@@ -7,13 +7,12 @@
             einfach erneut.
         </p>
         <div>
-            <button mat-raised-button color="primary" (click)="getLinks()">
+            <button mat-raised-button color="primary" [disabled]="loading" (click)="getLinks()">
                 Links erhalten
             </button>
         </div>
         
         <mat-selection-list #modulesList 
-            (selectionChange)="onNgModelChange($event)"
             color="primary"
             >
             <mat-list-option *ngFor="let module of modules" [value]="module.name">
@@ -22,7 +21,7 @@
         </mat-selection-list>
         
         <div>
-            <button mat-raised-button color="primary" (click)="getLinks()">
+            <button mat-raised-button color="primary" [disabled]="loading" (click)="getLinks()">
                 Links erhalten
             </button>
         </div>

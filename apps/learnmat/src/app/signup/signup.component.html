@@ -5,12 +5,12 @@
         </h1>
         <p>
             Auf dieser Seite kannst du dich mit deiner Uni-Mail für Lernmaterialien der 
-            Fachschaft Informatik anmelden. Du erhälst anschließend eine Mail mit einem 
+            Fachschaft Informatik anmelden. Du erhältst anschließend eine Mail mit einem 
             personalisierten Zugang. Wir speichern keinerlei Informationen von dir! Deine
             E-Mail-Adresse wird lediglich zur Validierung und für den Versand benötigt.
         </p>
 
-        <form [formGroup]="signupForm" autocomplete="off" novalidate (ngSubmit)="signup(signupForm.value)">
+        <form [formGroup]="signupForm" autocomplete="off" novalidate (ngSubmit)="signup()">
             <mat-form-field class="email-field">
                 <mat-label>Uni-Mail-Adresse</mat-label>
                 <input type="email" matInput formControlName="email" placeholder="max.mustermann@uni-hildesheim.de" email>
@@ -27,7 +27,7 @@
             </mat-form-field>
     
             <div class="actions">
-                <button mat-raised-button color="primary" [disabled]="!signupForm.valid">Zugang beantragen</button>
+                <button mat-raised-button color="primary" [disabled]="!signupForm.valid || loading">Zugang beantragen</button>
             </div>
         </form>
     </div>
