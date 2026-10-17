@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -20,13 +20,11 @@ export class BrowserGuard implements CanActivate {
         return this.router.parseUrl('/'); 
       }
 
-      return this.auth.validate(token).pipe(map(resp => {
-          if(resp.status == 200) {
-            return true;
-          } else {
-            return this.router.parseUrl('/'); 
-          }
-      }));
+      // An invalid token is answered with 401, which arrives as an error, not as a response
+      return this.auth.validate(token).pipe(
+        map(resp => resp.status == 200 ? true : this.router.parseUrl('/')),
+        catchError(() => of(this.router.parseUrl('/'))),
+      );
   }
   
 }
