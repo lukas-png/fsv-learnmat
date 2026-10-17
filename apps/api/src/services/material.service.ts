@@ -45,14 +45,12 @@ class MaterialService {
                 + name + "&path=" + encodeURIComponent(file) 
                 + "&shareType=3&expireDate=" + expire.toISOString().slice(0, 10);
             const basicLogin = Buffer.from(config.get("accUsername") + ":" + config.get("accPassword")).toString('base64')
-            console.log(basicLogin)
             const data = await new RequestBuilder()
                 .url(ownCloudUrl)
                 .header('Authorization', 'Basic ' + basicLogin)
                 .POST({}).buildAndExecute()
             
             const oscData = JSON.parse(data.data).ocs.data;
-            console.log(JSON.parse(data.data))
             const fileName = oscData.file_target.replace("/", "");
             const url = oscData.url;
             urls.push({name: fileName, url}) 

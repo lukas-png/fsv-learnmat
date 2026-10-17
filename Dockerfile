@@ -45,6 +45,7 @@ ENV NODE_CONFIG_DIR=/app/dist/apps/api/configs
 # ACC_HOST       - AcademicCloud WebDAV URL (default below)
 # DOMAIN         - Public domain, e.g. https://learnmat.example.de
 # PORT           - HTTP port to listen on (default 80)
+# TRUST_PROXY    - Set to true behind a reverse proxy (NetBird), needed for per-IP rate limiting
 ENV ACC_HOST=https://sync.academiccloud.de/remote.php/nonshib-webdav
 
 # Direct HTTPS (without a reverse proxy): keep PORT != 443 and mount the certs (see above).

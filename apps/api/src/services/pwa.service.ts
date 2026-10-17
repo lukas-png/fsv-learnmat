@@ -4,6 +4,11 @@ import * as cheerio from 'cheerio';
 
 const RequestBuilder = okhttp.RequestBuilder;
 
+// Looks up a uni member in the PWA directory, intended to tell staff and students apart.
+// Not wired into any route yet. Before using it for real:
+// - the PWA login sends the password as a URL query parameter, which may end up in server logs
+// - clarify with the university IT whether automated directory lookups are allowed
+// - the signup page states that no personal data is stored; update it accordingly
 class PwaService {
 
     cookie: String;
@@ -14,10 +19,9 @@ class PwaService {
                 .POST({})
                 .buildAndExecute();
         this.cookie = data.response.headers['set-cookie'][0];
-        console.log("session-cookie: ", this.cookie);
     }
 
-    public async search(alias: String) {
+    public async search(alias: String): Promise<Record<string, string>> {
         if (!this.cookie || this.cookie === "") {
             await this.login();
         }
@@ -32,7 +36,7 @@ class PwaService {
             
         const body: string = data.data;
         const $ = cheerio.load(body);
-        const person = {
+        const person: Record<string, string> = {
         }
         
         for(let i = 2; i <= 14; i++) {
@@ -49,7 +53,7 @@ class PwaService {
             person[header] = data;
         }
         
-        console.log(JSON.parse(JSON.stringify(person)));
+        return person;
     }
 
 
