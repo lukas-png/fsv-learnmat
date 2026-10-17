@@ -6,4 +6,4 @@ dist
 .env
 *.pem
 npm-cache
-nx-cache
+

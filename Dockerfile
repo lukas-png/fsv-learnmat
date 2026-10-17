@@ -1,4 +1,4 @@
-FROM node:22-bullseye-slim AS builder
+FROM node:22-bookworm-slim AS builder
 
 WORKDIR /app
 
@@ -8,23 +8,22 @@ ENV NX_DAEMON=false
 
 COPY package*.json ./
 
-RUN --mount=type=cache,target=/root/.npm npm install --legacy-peer-deps
+RUN --mount=type=cache,target=/root/.npm npm ci --legacy-peer-deps
 
 COPY . .
 
-# .nx/cache is a cache mount, persisted between CI runs (see .github/workflows/main.yml)
-RUN --mount=type=cache,target=/app/.nx/cache npx nx build api --configuration=production
-RUN --mount=type=cache,target=/app/.nx/cache npx nx build learnmat --configuration=production
+RUN npx nx build api --configuration=production
+RUN npx nx build learnmat --configuration=production
 
 # Copy config files to dist and create empty production.json
 RUN cp -r apps/api/src/configs dist/apps/api/configs && echo '{}' > dist/apps/api/configs/production.json
 
-FROM node:22-bullseye-slim AS production
+FROM node:22-bookworm-slim AS production
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN --mount=type=cache,target=/root/.npm npm install --omit=dev --legacy-peer-deps --ignore-scripts
+RUN --mount=type=cache,target=/root/.npm npm ci --omit=dev --legacy-peer-deps --ignore-scripts
 
 COPY --from=builder /app/dist/apps/api ./dist/apps/api
 COPY --from=builder /app/dist/apps/learnmat ./dist/apps/learnmat
