@@ -3,6 +3,10 @@ import { validate, ValidationError } from 'class-validator';
 import { RequestHandler } from 'express';
 import HttpException from '@exceptions/HttpException';
 
+// Nested errors (from @ValidateNested) carry their messages in children, not in constraints
+const collectMessages = (errors: ValidationError[]): string[] =>
+  errors.flatMap(error => [...Object.values(error.constraints ?? {}), ...collectMessages(error.children ?? [])]);
+
 const validationMiddleware = (
   type: any,
   value: string | 'body' | 'query' | 'params' = 'body',
@@ -13,12 +17,12 @@ const validationMiddleware = (
   return (req, res, next) => {
     validate(plainToClass(type, req[value]), { skipMissingProperties, whitelist, forbidNonWhitelisted }).then((errors: ValidationError[]) => {
       if (errors.length > 0) {
-        const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(', ');
+        const message = collectMessages(errors).join(', ');
         next(new HttpException(400, message));
       } else {
         next();
       }
-    });
+    }).catch(next);
   };
 };
 
