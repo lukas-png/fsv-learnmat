@@ -14,6 +14,9 @@ import config from 'config';
 import https from 'https';
 import fs from 'fs';
 
+// Access links carry the JWT as ?token=..., keep it out of the access logs
+morgan.token('url', (req: express.Request) => (req.originalUrl || req.url).replace(/([?&]token=)[^&]*/gi, '$1***'));
+
 
 class App {
   public app: express.Application;
