@@ -1,6 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 
 import { environment } from './../environments/environment';
 
@@ -12,13 +12,11 @@ export class AuthService {
 
 
   public async signup(email: string): Promise<void> {
-    return this.http.post(environment.apiUrl + '/signup', {
+    await firstValueFrom(this.http.post(environment.apiUrl + '/signup', {
       email
     }, {
       observe: 'response'
-    }).toPromise().then(() => undefined).catch(error => {
-      throw error;
-    });
+    }));
   }
 
   public validate(token: string): Observable<HttpResponse<object>> {
