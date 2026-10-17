@@ -11,7 +11,31 @@ on:
       - main
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Lint, test and build
+        run: npx nx run-many -t lint test build
+        env:
+          NX_DAEMON: false
+
   build:
+    needs: check
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -46,25 +70,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Cache npm and Nx
+      - name: Cache npm
         id: cache
         uses: actions/cache@v4
         with:
-          path: |
-            npm-cache
-            nx-cache
-          key: buildkit-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          path: npm-cache
+          key: buildkit-npm-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            buildkit-${{ hashFiles('package-lock.json') }}-
-            buildkit-
+            buildkit-npm-
 
-      - name: Inject caches into Docker build
+      - name: Inject npm cache into Docker build
         uses: reproducible-containers/buildkit-cache-dance@v3
         with:
           cache-map: |
             {
-              "npm-cache": "/root/.npm",
-              "nx-cache": "/app/.nx/cache"
+              "npm-cache": "/root/.npm"
             }
           skip-extraction: ${{ steps.cache.outputs.cache-hit }}
 
