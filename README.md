@@ -10,12 +10,12 @@ Studierende registrieren sich mit ihrer Uni-Mail, erhalten einen Link per E-Mail
 
 | | |
 |---|---|
-| Frontend | Angular 13 + Angular Material |
-| Backend | Express.js (Node 18) |
-| Monorepo | Nx |
+| Frontend | Angular 20 + Angular Material |
+| Backend | Express.js (Node 22) |
+| Monorepo | Nx 21 |
 | Storage | Academic Cloud via WebDAV |
 | Mail | SMTP Uni Hildesheim |
-| Deploy | Docker + Watchtower + GitHub Actions |
+| Deploy | Docker + Watchtower + GitHub Actions, hinter NetBird (TLS) |
 
 ---
 
@@ -30,9 +30,12 @@ nx serve api
 
 # Frontend starten (Port 4200)
 npm start
+
+# Lint, Tests und Build für alle Projekte (läuft so auch in CI)
+npx nx run-many -t lint test build
 ```
 
-Umgebungsvariablen werden in `apps/api/src/configs/default.json` konfiguriert.
+Die Konfiguration kommt aus Umgebungsvariablen (Zuordnung in `apps/api/src/configs/custom-environment-variables.json`). Lokal kann eine `.env` im Projektroot verwendet werden, sie wird per `dotenv` geladen. Nicht-geheime Standardwerte stehen in `apps/api/src/configs/default.json`, Zugangsdaten gehören **nicht** dort hinein.
 
 ### Umgebungsvariablen
 
@@ -48,7 +51,7 @@ Umgebungsvariablen werden in `apps/api/src/configs/default.json` konfiguriert.
 | `ACC_PASSWORD` | AcademicCloud App-Passwort |
 | `ACC_HOST` | WebDAV-URL (Standard: Academic Cloud) |
 | `DOMAIN` | Öffentliche Domain, z.B. `https://learnmat.example.de` |
-| `TRUST_PROXY` | `true` wenn hinter einem Reverse Proxy |
+| `TRUST_PROXY` | `true` hinter einem Reverse Proxy (NetBird), nötig für das Rate-Limit pro IP |
 
 ### AcademicCloud Struktur
 
@@ -70,6 +73,10 @@ Signup (Uni-Mail) → JWT per Mail → Link öffnen → Module auswählen → 7-
 ```
 
 Passwortlos — Authentifizierung ausschließlich über JWT-Links.
+
+- `POST /api/signup` ist auf 5 Anfragen pro 15 Minuten und IP begrenzt, weil jede Anfrage eine Mail über das Fachschaftskonto verschickt.
+- Tokens werden in den Access-Logs als `token=***` maskiert.
+- `GET /api/` antwortet ohne externe Aufrufe mit `200` und eignet sich als Health-Check.
 
 ---
 

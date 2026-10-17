@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "module": "node16",
+    "isolatedModules": true,
     "types": ["jest", "node"]
   },
   "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
