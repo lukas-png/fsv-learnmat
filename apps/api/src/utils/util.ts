@@ -19,6 +19,6 @@ export const isEmpty = (value: string | number | object): boolean => {
 };
 
 export const isUniMail = (value: string): boolean => {
-  const regex = /^[a-z0-9.]+@uni-hildesheim.de$/g;
+  const regex = /^[a-z0-9.]+@uni-hildesheim\.de$/;
   return regex.test(value.toLocaleLowerCase());
 }

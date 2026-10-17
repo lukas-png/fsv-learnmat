@@ -1,6 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import MaterialService from '@/services/material.service';
+import { GetLinksDto } from '@/dtos/material.dto';
 
 class ModulesController {
 
@@ -19,8 +20,13 @@ class ModulesController {
   };
 
   public get = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
-    await this.materialService.createShares(req.body.modules, req.user.email);
-    res.status(200).send();
+    try {
+      const { modules }: GetLinksDto = req.body;
+      await this.materialService.createShares(modules, req.user.email);
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
   };
 }
 

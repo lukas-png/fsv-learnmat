@@ -1,8 +1,5 @@
 import config from 'config';
-import * as okhttp from "okhttp";
 import * as cheerio from 'cheerio';
-
-const RequestBuilder = okhttp.RequestBuilder;
 
 // Looks up a uni member in the PWA directory, intended to tell staff and students apart.
 // Not wired into any route yet. Before using it for real:
@@ -11,14 +8,15 @@ const RequestBuilder = okhttp.RequestBuilder;
 // - the signup page states that no personal data is stored; update it accordingly
 class PwaService {
 
-    cookie: String;
+    cookie: string;
 
     public async login() {
-        const data = await new RequestBuilder()
-                .url(`https://pwa.uni-hildesheim.de/AuthServlet?uid=${config.get('uniUsername')}&userPassword=${encodeURIComponent(config.get('uniPassword'))}`)
-                .POST({})
-                .buildAndExecute();
-        this.cookie = data.response.headers['set-cookie'][0];
+        // redirect: 'manual' keeps the Set-Cookie header of the login response
+        const response = await fetch(`https://pwa.uni-hildesheim.de/AuthServlet?uid=${config.get('uniUsername')}&userPassword=${encodeURIComponent(config.get('uniPassword'))}`, {
+            method: 'POST',
+            redirect: 'manual',
+        });
+        this.cookie = response.headers.get('set-cookie')?.split(';')[0] ?? '';
     }
 
     public async search(alias: String): Promise<Record<string, string>> {
@@ -27,14 +25,12 @@ class PwaService {
         }
 
         const url = `https://pwa.uni-hildesheim.de/personal/search/userOverview.jsp?dn=uid%3D${alias}%2Cou%3DPeople%2Cdc%3Duni-hildesheim%2Cdc%3Dde`;
-        const data = await new RequestBuilder()
-            .url(url)
-            .header('Cookie', this.cookie)
-            .POST({})
-            .textResponse()
-            .buildAndExecute();
-            
-        const body: string = data.data;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Cookie': this.cookie },
+        });
+
+        const body: string = await response.text();
         const $ = cheerio.load(body);
         const person: Record<string, string> = {
         }
