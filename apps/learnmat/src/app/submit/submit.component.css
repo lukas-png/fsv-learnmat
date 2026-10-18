@@ -1,0 +1,67 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.submit {
+    width: 763px;
+    min-width: 0;
+}
+
+.beta {
+    display: inline-block;
+    padding: 0 0.5rem;
+    border-radius: 0.6rem;
+    background-color: #7cbb42;
+    color: white;
+    font-size: 0.45em;
+    font-weight: 500;
+    line-height: 1.6;
+    vertical-align: middle;
+}
+
+.rules {
+    margin: 1.5rem 0 2rem;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid #7cbb42;
+    background-color: #f4f9ef;
+}
+
+.rules ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.field {
+    width: 100%;
+    max-width: 500px;
+}
+
+.file {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+}
+
+.file-name {
+    color: #6b6b6b;
+    overflow-wrap: anywhere;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+}
+
+.actions a {
+    color: #5fa42b;
+}

@@ -19,13 +19,15 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { TranslatePipe } from './i18n/translate.pipe';
+import { SubmitComponent } from './submit/submit.component';
 
 @NgModule({ declarations: [
         AppComponent,
         SignupComponent,
         BrowserComponent,
         ThanksComponent,
-        SuccessComponent
+        SuccessComponent,
+        SubmitComponent
     ],
     bootstrap: [AppComponent],
     schemas: [

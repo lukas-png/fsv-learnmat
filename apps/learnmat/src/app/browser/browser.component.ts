@@ -36,7 +36,7 @@ export class BrowserComponent implements OnInit {
   @ViewChild('modulesList')
   modulesList?: MatSelectionList;
 
-  private token: string | null = null;
+  protected token: string | null = null;
 
   async ngOnInit(): Promise<void> {
     this.token = this.route.snapshot.queryParamMap.get("token");

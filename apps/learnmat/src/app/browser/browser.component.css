@@ -67,6 +67,27 @@ button {
     vertical-align: middle;
 }
 
+.submit-link {
+    clear: both;
+    margin-top: 1rem;
+}
+
+.submit-link a {
+    color: #5fa42b;
+}
+
+.submit-link .beta {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0 0.45rem;
+    border-radius: 0.6rem;
+    border: 1px solid #7cbb42;
+    color: #5fa42b;
+    font-size: 0.75em;
+    line-height: 1.5;
+    vertical-align: middle;
+}
+
 .updated {
     display: block;
     color: #8a8a8a;
