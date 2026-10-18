@@ -27,8 +27,14 @@ export class LanguageService {
     }
   }
 
-  t(key: TranslationKey): string {
-    return TRANSLATIONS[this.lang()][key];
+  // Replaces {name} placeholders with the given params
+  t(key: TranslationKey, params?: Record<string, string | number>): string {
+    const text = TRANSLATIONS[this.lang()][key];
+    return params ? text.replace(/\{(\w+)\}/g, (match, name) => String(params[name] ?? match)) : text;
+  }
+
+  formatDate(iso: string): string {
+    return new Date(iso).toLocaleDateString(this.lang() === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   }
 
   private initialLanguage(): Language {

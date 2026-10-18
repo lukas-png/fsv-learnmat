@@ -8,15 +8,38 @@
                 {{ 'browse.getLinks' | t }}
             </button>
         </div>
-        
-        <mat-selection-list #modulesList 
+
+        <div class="filters">
+            <mat-form-field class="search-field" subscriptSizing="dynamic">
+                <mat-label>{{ 'browse.search' | t }}</mat-label>
+                <input matInput type="search" [(ngModel)]="search" autocomplete="off">
+            </mat-form-field>
+            <mat-checkbox color="primary" [(ngModel)]="onlyRecent">{{ 'browse.onlyRecent' | t }}</mat-checkbox>
+            @if (selected.size > 0) {
+                <span class="selection-info">
+                    {{ 'browse.selectedCount' | t: { count: selected.size } }}
+                    <a href="" (click)="$event.preventDefault(); clearSelection()">{{ 'browse.clearSelection' | t }}</a>
+                </span>
+            }
+        </div>
+
+        <mat-selection-list #modulesList
             color="primary"
+            (selectionChange)="onSelectionChange($event)"
             >
-            <mat-list-option *ngFor="let module of modules" [value]="module.name">
-                {{module.name}}
-            </mat-list-option>
+            @for (module of filteredModules; track module.name) {
+                <mat-list-option [value]="module.name" [selected]="selected.has(module.name)">
+                    <span class="module-name">{{ module.name }}</span>@if (isRecent(module)) {<span class="badge">{{ 'browse.new' | t }}</span>}
+                    @if (module.updated) {
+                        <span class="updated">{{ 'browse.updated' | t: { date: language.formatDate(module.updated) } }}</span>
+                    }
+                </mat-list-option>
+            }
         </mat-selection-list>
-        
+        @if (modules.length > 0 && filteredModules.length === 0) {
+            <p class="no-results">{{ 'browse.noResults' | t }}</p>
+        }
+
         <div>
             <button mat-raised-button color="primary" [disabled]="loading" (click)="getLinks()">
                 {{ 'browse.getLinks' | t }}
