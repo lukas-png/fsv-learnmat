@@ -8,6 +8,8 @@ import { of, throwError } from 'rxjs';
 import { ModulesService } from '../modules.service';
 import { SuccessComponent } from '../success/success.component';
 import { BrowserComponent } from './browser.component';
+import { LanguageService } from '../i18n/language.service';
+import { TranslatePipe } from '../i18n/translate.pipe';
 
 describe('BrowserComponent', () => {
   let fixture: ComponentFixture<BrowserComponent>;
@@ -22,12 +24,13 @@ describe('BrowserComponent', () => {
   const setup = async () => {
     await TestBed.configureTestingModule({
       declarations: [BrowserComponent],
-      imports: [MatListModule, MatButtonModule, MatSnackBarModule, NoopAnimationsModule],
+      imports: [TranslatePipe, MatListModule, MatButtonModule, MatSnackBarModule, NoopAnimationsModule],
       providers: [
         { provide: ModulesService, useValue: modulesService },
         { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap({ token: 'abc' }) } } },
       ],
     }).compileComponents();
+    TestBed.inject(LanguageService).set('de');
 
     fixture = TestBed.createComponent(BrowserComponent);
     component = fixture.componentInstance;

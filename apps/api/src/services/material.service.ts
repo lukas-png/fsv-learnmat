@@ -1,5 +1,6 @@
 import { ListMaterialDto } from '@/dtos/material.dto';
 import HttpException from '@exceptions/HttpException';
+import { Language, linksMail } from '@utils/mail-texts';
 import config from 'config';
 import { createClient, WebDAVClient } from "webdav";
 
@@ -32,7 +33,7 @@ class MaterialService {
         return files.filter(f => f.type === 'directory').map(file => ({ name: file.basename, etag: file.etag.replace("&quot;", "").replace("&quot;", "")} as ListMaterialDto) )
     }
 
-    public async createShares(modules: ListMaterialDto[], email: string): Promise<void> {
+    public async createShares(modules: ListMaterialDto[], email: string, lang: Language = 'de'): Promise<void> {
         const client = this.createWebDavClient();
         const mail = new MailService();
 
@@ -51,11 +52,8 @@ class MaterialService {
         let linksFormatted = "";
         urls.forEach(link => linksFormatted += link.name + " ~> " + link.url + "\n")
 
-        await mail.mail(email, "Lernunterlagen Links",
-            "Hallo,\ndu kannst die Lernunterlagen unter den folgenden Links herunterladen: \n\n" + linksFormatted
-            + "\n\nDie Links sind gültig bis: " + expire.toLocaleDateString("de-DE") + ", bitte lade die Unterlagen vorher herunter!"
-            + "\nSolltest du weitere Unterlagen benötigen, kannst du sie ebenfalls über den Lernmaterial-Verteiler beantragen. "
-            + "\n\nViele Grüße,\ndeine Informatik Fachschaft 💻!");
+        const { subject, text } = linksMail(lang, linksFormatted, expire);
+        await mail.mail(email, subject, text);
     }
 
     // Creates a public link share (shareType=3) via the OCS API of the same server as accHost

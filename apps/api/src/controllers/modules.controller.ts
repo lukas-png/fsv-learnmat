@@ -21,8 +21,8 @@ class ModulesController {
 
   public get = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { modules }: GetLinksDto = req.body;
-      await this.materialService.createShares(modules, req.user.email);
+      const { modules, lang }: GetLinksDto = req.body;
+      await this.materialService.createShares(modules, req.user.email, lang ?? 'de');
       res.status(200).send();
     } catch (error) {
       next(error);

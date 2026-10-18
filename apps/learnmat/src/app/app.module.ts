@@ -18,6 +18,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
+import { TranslatePipe } from './i18n/translate.pipe';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -40,7 +41,8 @@ import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
         BrowserAnimationsModule,
         MatFormFieldModule,
         FormsModule,
-        ReactiveFormsModule], providers: [
+        ReactiveFormsModule,
+        TranslatePipe], providers: [
         provideHttpClient(withInterceptorsFromDi())
     ] })
 export class AppModule { }

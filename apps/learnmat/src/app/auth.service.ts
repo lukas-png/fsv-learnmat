@@ -3,17 +3,20 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, firstValueFrom } from 'rxjs';
 
 import { environment } from './../environments/environment';
+import { LanguageService } from './i18n/language.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private http = inject(HttpClient);
+  private language = inject(LanguageService);
 
 
   public async signup(email: string): Promise<void> {
     await firstValueFrom(this.http.post(environment.apiUrl + '/signup', {
-      email
+      email,
+      lang: this.language.lang()
     }, {
       observe: 'response'
     }));

@@ -1,12 +1,18 @@
 <header (click)="home()">
   <div class="logo">
-    <img src="assets/img/logo.png" />
+    <img src="assets/img/logo.png" alt="" />
   </div>
   <div class="text">
     <p class="title">FSV Informatik</p>
-    <p class="subtitle">Lernmaterial-Verteiler</p>
+    <p class="subtitle">{{ 'header.subtitle' | t }}</p>
   </div>
   <div class="line"></div>
+  <nav class="lang" [attr.aria-label]="'header.language' | t" (click)="$event.stopPropagation()">
+    @for (option of languages; track option) {
+      <button type="button" [class.active]="language.lang() === option" [attr.aria-pressed]="language.lang() === option"
+              (click)="language.set(option)">{{ option | uppercase }}</button>
+    }
+  </nav>
 </header>
 
 <div class="content">

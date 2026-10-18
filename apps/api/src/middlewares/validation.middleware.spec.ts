@@ -28,6 +28,12 @@ describe('validationMiddleware with GetLinksDto', () => {
     await expect(run({ modules: [{ name: 'a', etag: 'b' }], admin: true })).resolves.toMatchObject({ status: 400 });
   });
 
+  it('accepts a supported language and rejects others', async () => {
+    const modules = [{ name: 'Datenbanken', etag: 'abc' }];
+    await expect(run({ modules, lang: 'en' })).resolves.toBeUndefined();
+    await expect(run({ modules, lang: 'fr' })).resolves.toMatchObject({ status: 400 });
+  });
+
   it('rejects more than 50 modules', async () => {
     const modules = Array.from({ length: 51 }, (_, i) => ({ name: 'm' + i, etag: 'e' + i }));
     await expect(run({ modules })).resolves.toMatchObject({ status: 400 });

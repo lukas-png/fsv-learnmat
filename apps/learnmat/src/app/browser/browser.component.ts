@@ -6,6 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessComponent } from '../success/success.component';
 import { ModulesService } from '../modules.service';
 import { MatSelectionList } from '@angular/material/list';
+import { LanguageService } from '../i18n/language.service';
+import { TranslationKey } from '../i18n/translations';
 
 @Component({
     selector: 'app-browser',
@@ -17,6 +19,7 @@ export class BrowserComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private _snackBar = inject(MatSnackBar);
   private modulesService = inject(ModulesService);
+  private language = inject(LanguageService);
 
 
   modules: LearningModule[] = [];
@@ -34,7 +37,7 @@ export class BrowserComponent implements OnInit {
         const data = await firstValueFrom(this.modulesService.getModules(this.token));
         this.modules = data.modules;
       } catch {
-        this.showError("Die Module konnten nicht geladen werden. Bitte lade die Seite neu.");
+        this.showError('browse.loadFailed');
       }
     }
   }
@@ -43,7 +46,7 @@ export class BrowserComponent implements OnInit {
     const selection: string[] = this.modulesList?.selectedOptions.selected.map(option => option.value) ?? [];
 
     if (selection.length == 0) {
-      this._snackBar.open("Wähle bitte ein Lernmaterial-Modul aus!", "Okay", {
+      this._snackBar.open(this.language.t('browse.selectModule'), this.language.t('common.ok'), {
         duration: 3500
       });
       return;
@@ -59,14 +62,14 @@ export class BrowserComponent implements OnInit {
         duration: 3500
       });
     } catch {
-      this.showError("Die Links konnten nicht verschickt werden. Bitte versuche es später erneut.");
+      this.showError('browse.linksFailed');
     } finally {
       this.loading = false;
     }
   }
 
-  private showError(message: string) {
-    this._snackBar.open(message, "Okay", { duration: 5000 });
+  private showError(key: TranslationKey) {
+    this._snackBar.open(this.language.t(key), this.language.t('common.ok'), { duration: 5000 });
   }
 
 }
