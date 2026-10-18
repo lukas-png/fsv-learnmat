@@ -9,6 +9,10 @@ import MailService from './mail.service';
 const MATERIAL_DIR = "/altklausuren";
 const SHARE_DAYS = 7;
 
+export interface MaterialInfo extends ListMaterialDto {
+    updated?: string;
+}
+
 interface OcsShareResponse {
     ocs?: {
         meta?: { status?: string };
@@ -25,12 +29,20 @@ class MaterialService {
         });
     }
 
-    public async getMaterials(): Promise<ListMaterialDto[]> {
+    public async getMaterials(): Promise<MaterialInfo[]> {
         const client = this.createWebDavClient();
 
-        const files = (await client.getDirectoryContents(MATERIAL_DIR)) as {basename: string, type: string, etag: string}[];
+        const files = (await client.getDirectoryContents(MATERIAL_DIR)) as {basename: string, type: string, etag: string, lastmod: string}[];
 
-        return files.filter(f => f.type === 'directory').map(file => ({ name: file.basename, etag: file.etag.replace("&quot;", "").replace("&quot;", "")} as ListMaterialDto) )
+        return files.filter(f => f.type === 'directory').map(file => {
+            // Nextcloud propagates changes of contained files to the folder's modification time
+            const updated = new Date(file.lastmod);
+            return {
+                name: file.basename,
+                etag: file.etag.replace("&quot;", "").replace("&quot;", ""),
+                updated: isNaN(updated.getTime()) ? undefined : updated.toISOString(),
+            };
+        });
     }
 
     public async createShares(modules: ListMaterialDto[], email: string, lang: Language = 'de'): Promise<void> {

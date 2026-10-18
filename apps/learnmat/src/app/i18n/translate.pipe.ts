@@ -11,7 +11,7 @@ import { TranslationKey } from './translations';
 export class TranslatePipe implements PipeTransform {
   private language = inject(LanguageService);
 
-  transform(key: TranslationKey): string {
-    return this.language.t(key);
+  transform(key: TranslationKey, params?: Record<string, string | number>): string {
+    return this.language.t(key, params);
   }
 }

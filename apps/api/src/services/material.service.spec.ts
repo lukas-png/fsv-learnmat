@@ -20,8 +20,8 @@ jest.mock('./mail.service', () => ({
 
 const directory = [
   { filename: '/altklausuren', basename: 'altklausuren', type: 'directory', etag: '&quot;root&quot;' },
-  { filename: '/altklausuren/Datenbanken', basename: 'Datenbanken', type: 'directory', etag: '&quot;db1&quot;' },
-  { filename: '/altklausuren/Mathematik I', basename: 'Mathematik I', type: 'directory', etag: '&quot;ma1&quot;' },
+  { filename: '/altklausuren/Datenbanken', basename: 'Datenbanken', type: 'directory', etag: '&quot;db1&quot;', lastmod: 'Tue, 03 Mar 2026 10:00:00 GMT' },
+  { filename: '/altklausuren/Mathematik I', basename: 'Mathematik I', type: 'directory', etag: '&quot;ma1&quot;', lastmod: 'invalid' },
   { filename: '/altklausuren/readme.txt', basename: 'readme.txt', type: 'file', etag: '&quot;txt&quot;' },
 ];
 
@@ -41,13 +41,13 @@ describe('MaterialService', () => {
     global.fetch = fetchMock as unknown as typeof fetch;
   });
 
-  it('lists only directories, with plain etags', async () => {
+  it('lists only directories, with plain etags and their modification date', async () => {
     const materials = await service.getMaterials();
 
     expect(materials).toEqual([
-      { name: 'altklausuren', etag: 'root' },
-      { name: 'Datenbanken', etag: 'db1' },
-      { name: 'Mathematik I', etag: 'ma1' },
+      { name: 'altklausuren', etag: 'root', updated: undefined },
+      { name: 'Datenbanken', etag: 'db1', updated: '2026-03-03T10:00:00.000Z' },
+      { name: 'Mathematik I', etag: 'ma1', updated: undefined },
     ]);
   });
 
