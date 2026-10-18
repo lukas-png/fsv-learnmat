@@ -40,6 +40,13 @@ describe('AuthService', () => {
       expect(mockMail.mock.calls[1][2]).toContain('Your link:');
     });
 
+    it('states until when the link is valid', async () => {
+      await service.signup({ email: 'max@uni-hildesheim.de' });
+
+      const expires = new Date(Date.now() + 180 * 864e5).toLocaleDateString('de-DE');
+      expect(mockMail.mock.calls[0][2]).toContain('gültig bis zum ' + expires);
+    });
+
     it('rejects non-university addresses without sending a mail', async () => {
       await expect(service.signup({ email: 'max@gmail.com' })).rejects.toMatchObject({ status: 400 });
       expect(mockMail).not.toHaveBeenCalled();
@@ -59,6 +66,22 @@ describe('AuthService', () => {
     it('accepts a token it created', async () => {
       const { token } = service.createToken({ email: 'max@uni-hildesheim.de' });
       await expect(service.validate({ token })).resolves.toBe(true);
+    });
+
+    it('creates tokens that expire after about a semester', () => {
+      const { token } = service.createToken({ email: 'max@uni-hildesheim.de' });
+      const { iat, exp } = jwt.decode(token) as { iat: number, exp: number };
+      expect(exp - iat).toBe(180 * 86400);
+    });
+
+    it('tells expired tokens apart from invalid ones', async () => {
+      const expired = jwt.sign({ email: 'max@uni-hildesheim.de' }, 'test-secret', { expiresIn: -1 });
+      const old = jwt.sign({ email: 'max@uni-hildesheim.de', iat: Math.floor(Date.now() / 1000) - 181 * 86400 }, 'test-secret');
+      const forged = jwt.sign({ email: 'max@uni-hildesheim.de' }, 'other-secret', { expiresIn: -1 });
+
+      await expect(service.validate({ token: expired })).rejects.toMatchObject({ status: 401, message: 'Expired' });
+      await expect(service.validate({ token: old })).rejects.toMatchObject({ status: 401, message: 'Expired' });
+      await expect(service.validate({ token: forged })).rejects.toMatchObject({ status: 401, message: 'Not valid' });
     });
 
     it('rejects a token signed with another secret', async () => {

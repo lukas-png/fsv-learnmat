@@ -43,7 +43,7 @@ Die Konfiguration kommt aus Umgebungsvariablen (Zuordnung in `apps/api/src/confi
 |---|---|
 | `NODE_ENV` | `production` |
 | `PORT` | Port des HTTP-Servers (Standard: `80`) |
-| `SECRET_KEY` | JWT-Signing-Secret |
+| `SECRET_KEY` | JWT-Signing-Secret, mindestens 32 zufällige Zeichen (`openssl rand -hex 32`). Ohne gültigen Wert startet die API nicht. Ein Wechsel macht alle verschickten Links ungültig |
 | `UNI_USERNAME` | SMTP-Username der Uni |
 | `UNI_PASSWORD` | SMTP-Passwort |
 | `UNI_MAIL` | Absender-E-Mail-Adresse |
@@ -72,7 +72,7 @@ Nur Ordner direkt unter `/altklausuren` werden als Module angezeigt. Das Änderu
 
 - **Deutsch/Englisch:** Umschalter im Header, Standard nach Browsersprache. Mails werden in der gewählten Sprache verschickt. Texte stehen in `apps/learnmat/src/app/i18n/translations.ts` und `apps/api/src/utils/mail-texts.ts`.
 - **Suche und Filter** in der Modulliste, Auswahl bleibt beim Filtern erhalten.
-- **Material einreichen (Beta):** Unter `/submit` (verlinkt aus der Modulliste) können Studierende PDF, JPG oder PNG bis 20 MB hochladen. Die Dateien landen anonym in `/einreichungen` als `<Datum>_<Modul>_<Zufall>.<Endung>`, eine optionale Notiz als `.txt` daneben. Die Fachschaft prüft sie und verschiebt freigegebenes Material selbst nach `/altklausuren`. Limit: 10 Uploads pro Stunde und IP.
+- **Material einreichen (Beta):** Unter `/submit` (verlinkt aus der Modulliste) können Studierende PDF, JPG oder PNG bis 20 MB hochladen. Die Dateien landen anonym in `/einreichungen` als `<Datum>_<Modul>_<Zufall>.<Endung>`, eine optionale Notiz als `.txt` daneben. Die Fachschaft prüft sie und verschiebt freigegebenes Material selbst nach `/altklausuren`. Limits: 10 Uploads pro Stunde und IP, 10 pro Tag und Zugangslink, 50 pro Tag insgesamt.
 - **Anonyme Statistik:** `/statistik/JJJJ-MM.csv` mit den Spalten `typ;name;anzahl` (`anmeldung` je Sprache, `modul` je angefragtem Modul, `einreichung` je Modul). Nur Monatssummen, keine personenbezogenen Daten. Wird alle 10 Minuten und beim Stoppen des Containers geschrieben.
 - **Impressum und Datenschutz:** Impressum verlinkt auf den AStA, die Datenschutzerklärung liegt unter `/datenschutz`.
 
@@ -86,7 +86,8 @@ Signup (Uni-Mail) → JWT per Mail → Link öffnen → Module auswählen → 7-
 
 Passwortlos — Authentifizierung ausschließlich über JWT-Links.
 
-- `POST /api/signup` ist auf 5 Anfragen pro 15 Minuten und IP begrenzt, weil jede Anfrage eine Mail über das Fachschaftskonto verschickt.
+- Zugangslinks sind 180 Tage gültig, das Ablaufdatum steht in der Mail. Abgelaufene oder ungültige Links führen auf die Startseite mit einem Hinweis (`/?link=expired` bzw. `/?link=invalid`), dort fordert man einfach einen neuen an.
+- `POST /api/signup` ist auf 5 Anfragen pro 15 Minuten und IP begrenzt, weil jede Anfrage eine Mail über das Fachschaftskonto verschickt. Aus demselben Grund ist `POST /api/modules` auf 10 Anfragen pro Stunde und Zugangslink begrenzt. IPv6-Adressen werden für die Limits pro /56-Netz gezählt.
 - Tokens werden in den Access-Logs als `token=***` maskiert.
 - `GET /api/` antwortet ohne externe Aufrufe mit `200` und eignet sich als Health-Check.
 

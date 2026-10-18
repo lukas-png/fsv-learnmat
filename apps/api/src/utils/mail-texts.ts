@@ -2,7 +2,7 @@ export type Language = 'de' | 'en';
 
 export const LANGUAGES: Language[] = ['de', 'en'];
 
-export const accessMail = (lang: Language, email: string, link: string): { subject: string, text: string } =>
+export const accessMail = (lang: Language, email: string, link: string, expires: Date): { subject: string, text: string } =>
   lang === 'en'
     ? {
         subject: "Your access to the study material distribution",
@@ -10,6 +10,7 @@ export const accessMail = (lang: Language, email: string, link: string): { subje
           + "\nof the Computer Science student council. Please keep this email, as this link is your only way to "
           + "\naccess the collection. If you lose it, you can simply request a new one. "
           + "\n\nYour link: \n\n " + link
+          + "\n\nThe link is valid until " + expires.toLocaleDateString("en-GB") + ". After that, you can request a new one on the website."
           + "\n\nBest regards,\nyour Computer Science student council 💻!",
       }
     : {
@@ -19,6 +20,7 @@ export const accessMail = (lang: Language, email: string, link: string): { subje
           + "\nSammlung erhältst. Solltest du den Link trotzdem mal verlieren, kannst du dir ebenfalls einen "
           + "\nneuen zuschicken lassen. "
           + "\n\nDein Link lautet: \n\n " + link
+          + "\n\nDer Link ist gültig bis zum " + expires.toLocaleDateString("de-DE") + ". Danach kannst du dir auf der Website einfach einen neuen zuschicken lassen."
           + "\n\nViele Grüße,\ndeine Informatik Fachschaft 💻!",
       };
 

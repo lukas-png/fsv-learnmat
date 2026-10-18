@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { SignupComponent } from './signup.component';
 import { LanguageService } from '../i18n/language.service';
@@ -17,10 +17,12 @@ describe('SignupComponent', () => {
   let component: SignupComponent;
   const auth = { signup: jest.fn() };
   const router = { navigate: jest.fn() };
+  const route = { snapshot: { queryParamMap: convertToParamMap({}) } };
 
   beforeEach(async () => {
     auth.signup.mockReset().mockResolvedValue(undefined);
     router.navigate.mockReset();
+    route.snapshot.queryParamMap = convertToParamMap({});
 
     await TestBed.configureTestingModule({
       declarations: [SignupComponent],
@@ -28,6 +30,7 @@ describe('SignupComponent', () => {
       providers: [
         { provide: AuthService, useValue: auth },
         { provide: Router, useValue: router },
+        { provide: ActivatedRoute, useValue: route },
       ],
     }).compileComponents();
     TestBed.inject(LanguageService).set('de');
@@ -96,6 +99,28 @@ describe('SignupComponent', () => {
 
     expect(title()).toBe('Sign up for the study material distribution');
     expect(button().textContent.trim()).toBe('Request access');
+  });
+
+  describe('notice about a link that did not work', () => {
+    const notice = (link?: string) => {
+      route.snapshot.queryParamMap = convertToParamMap(link ? { link } : {});
+      const f = TestBed.createComponent(SignupComponent);
+      f.detectChanges();
+      return f.nativeElement.querySelector('.link-notice')?.textContent.trim();
+    };
+
+    it('is not shown normally', () => {
+      expect(fixture.nativeElement.querySelector('.link-notice')).toBeNull();
+      expect(notice('something-else')).toBeUndefined();
+    });
+
+    it('explains an expired link', () => {
+      expect(notice('expired')).toContain('abgelaufen');
+    });
+
+    it('explains an invalid link', () => {
+      expect(notice('invalid')).toContain('ungültig');
+    });
   });
 
   it('disables the button while the request is running', async () => {

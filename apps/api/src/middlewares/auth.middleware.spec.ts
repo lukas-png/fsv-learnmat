@@ -27,6 +27,11 @@ describe('authMiddleware', () => {
     ['an invalid token', 'Bearer not-a-jwt'],
     ['a token with another secret', 'Bearer ' + jwt.sign({ email: 'max@uni-hildesheim.de' }, 'other-secret')],
     ['a token without email', 'Bearer ' + jwt.sign({ foo: 'bar' }, 'test-secret')],
+    ['a token for a non-university address', 'Bearer ' + jwt.sign({ email: 'a@example.com, b@uni-hildesheim.de' }, 'test-secret')],
+    ['an expired token', 'Bearer ' + jwt.sign({ email: 'max@uni-hildesheim.de' }, 'test-secret', { expiresIn: -1 })],
+    // Issued before tokens got an expiry: no exp, but an iat older than the token lifetime
+    ['an old token without expiry', 'Bearer ' + jwt.sign({ email: 'max@uni-hildesheim.de', iat: Math.floor(Date.now() / 1000) - 181 * 86400 }, 'test-secret')],
+    ['an unsigned token', 'Bearer ' + jwt.sign({ email: 'max@uni-hildesheim.de' }, '', { algorithm: 'none' })],
   ])('responds 401 for %s', async (_, authorization) => {
     const next = jest.fn();
 
