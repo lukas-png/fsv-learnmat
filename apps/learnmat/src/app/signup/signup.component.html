@@ -3,6 +3,9 @@
         <h1>
             {{ 'signup.title' | t }}
         </h1>
+        <p class="link-notice" *ngIf="linkNotice" role="status">
+            {{ linkNotice | t }}
+        </p>
         <p>
             {{ 'signup.intro' | t }}
             <a routerLink="/datenschutz">{{ 'signup.privacy' | t }}</a>

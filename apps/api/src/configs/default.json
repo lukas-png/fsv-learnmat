@@ -1,6 +1,5 @@
 {
     "env": "development",
     "trustProxy": false,
-    "port": 3000,
-    "secretKey": "secretKey"
+    "port": 3000
 }

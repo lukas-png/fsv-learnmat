@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -164,6 +165,18 @@ describe('BrowserComponent', () => {
     expect(openFromComponent).not.toHaveBeenCalledWith(SuccessComponent, expect.anything());
     expect(component.modulesList?.selectedOptions.selected.length).toBe(1);
     expect(component.loading).toBe(false);
+  });
+
+  it('shows a rate-limit hint on 429', async () => {
+    modulesService.getLinks.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 429 })));
+    await setup();
+    const open = jest.spyOn(snackBar, 'open');
+    options()[0].click();
+    fixture.detectChanges();
+
+    await component.getLinks();
+
+    expect(open).toHaveBeenCalledWith(expect.stringContaining('zu viele Links'), 'Okay', expect.anything());
   });
 
   it('disables both buttons while the request is running', async () => {

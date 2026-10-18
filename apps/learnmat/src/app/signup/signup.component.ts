@@ -2,9 +2,16 @@ import { Component, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { LanguageService } from '../i18n/language.service';
+import { TranslationKey } from '../i18n/translations';
+
+// Set by BrowserGuard when an access link did not work
+const LINK_NOTICES: Record<string, TranslationKey> = {
+  expired: 'signup.linkExpired',
+  invalid: 'signup.linkInvalid',
+};
 
 
 @Component({
@@ -18,6 +25,8 @@ export class SignupComponent {
   private auth = inject(AuthService);
   private snackBar = inject(MatSnackBar);
   private language = inject(LanguageService);
+
+  protected linkNotice?: TranslationKey = LINK_NOTICES[inject(ActivatedRoute).snapshot.queryParamMap.get('link') ?? ''];
 
   public signupForm = new FormGroup({
     email: new FormControl('', {

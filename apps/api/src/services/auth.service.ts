@@ -1,11 +1,11 @@
 import config from 'config';
-import jwt from 'jsonwebtoken';
 import { CreateUserDto } from '@dtos/users.dto';
 import HttpException from '@exceptions/HttpException';
-import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
+import { TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import { isEmpty, isUniMail } from '@utils/util';
 import { accessMail } from '@utils/mail-texts';
+import { signToken, TokenExpiredError, verifyToken } from '@utils/token';
 import MailService from './mail.service';
 import { statsService } from './stats.service';
 
@@ -24,7 +24,7 @@ class AuthService {
 
     const mail = new MailService();
     const lang = userData.lang ?? 'de';
-    const { subject, text } = accessMail(lang, createdUser.email, config.get('domain') + "/browse?token=" + tokenData.token);
+    const { subject, text } = accessMail(lang, createdUser.email, config.get('domain') + "/browse?token=" + tokenData.token, tokenData.expires);
     await mail.mail(createdUser.email, subject, text);
     statsService.record('anmeldung', lang);
 
@@ -34,23 +34,18 @@ class AuthService {
   public async validate(tokenData: TokenData): Promise<Boolean> {
     if (isEmpty(tokenData)) throw new HttpException(401, "Not valid");
     if (isEmpty(tokenData.token)) throw new HttpException(401, "Not valid");
-    const secretKey: string = config.get('secretKey');
     try {
-      if (!jwt.verify(tokenData.token, secretKey)) {
-        throw new HttpException(401, "Not valid");
-      }
+      verifyToken(tokenData.token);
     } catch (e) {
-      throw new HttpException(401, "Not valid")
+      // Only reached for correctly signed tokens, so this reveals nothing about forged ones
+      throw new HttpException(401, e instanceof TokenExpiredError ? "Expired" : "Not valid")
     }
-  
+
     return true;
   }
 
-  public createToken(user: User): TokenData {
-    const dataStoredInToken: DataStoredInToken = { email: user.email };
-    const secretKey: string = config.get('secretKey');
-
-    return { token: jwt.sign(dataStoredInToken, secretKey) };
+  public createToken(user: User): TokenData & { expires: Date } {
+    return signToken({ email: user.email });
   }
 }
 

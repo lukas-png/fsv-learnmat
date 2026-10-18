@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { LearningModule } from '../learning-module.model';
@@ -94,8 +95,8 @@ export class BrowserComponent implements OnInit {
       this._snackBar.openFromComponent(SuccessComponent, {
         duration: 3500
       });
-    } catch {
-      this.showError('browse.linksFailed');
+    } catch (error) {
+      this.showError(error instanceof HttpErrorResponse && error.status === 429 ? 'browse.rateLimited' : 'browse.linksFailed');
     } finally {
       this.loading = false;
     }

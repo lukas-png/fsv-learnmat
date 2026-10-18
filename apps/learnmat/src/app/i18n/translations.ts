@@ -20,9 +20,11 @@ const de = {
   'signup.submit': 'Zugang beantragen',
   'signup.rateLimited': 'Zu viele Anfragen. Bitte versuche es in 15 Minuten erneut.',
   'signup.failed': 'Die Anmeldung hat nicht geklappt. Bitte versuche es später erneut.',
+  'signup.linkExpired': 'Dein Zugangslink ist abgelaufen. Links sind 180 Tage gültig – lass dir hier einfach einen neuen zuschicken.',
+  'signup.linkInvalid': 'Dein Zugangslink ist ungültig. Prüfe, ob du ihn vollständig kopiert hast, oder lass dir hier einen neuen zuschicken.',
 
   'thanks.title': 'Vielen Dank!',
-  'thanks.text': 'Du erhältst nun eine Mail von uns, in der ein personalisierter Link enthalten ist. Mit diesem Link gelangst du immer auf unseren Lernmaterial-Verteiler und kannst so immer das neueste Lernmaterial bekommen.',
+  'thanks.text': 'Du erhältst nun eine Mail von uns, in der ein personalisierter Link enthalten ist. Mit diesem Link gelangst du 180 Tage lang auf unseren Lernmaterial-Verteiler und kannst so immer das neueste Lernmaterial bekommen. Danach kannst du dir einfach einen neuen Link zuschicken lassen.',
   'thanks.mailbox': 'Zum Uni-Mail-Postfach',
 
   'browse.intro': 'Hier kannst du dir alle Ordner aussuchen, für die du Lernmaterial bekommen möchtest. Wir schicken dir anschließend entsprechende Links per Mail, die 7 Tage lang gültig sind. Bitte lade dir die Dokumente herunter oder beantrage die Links zu einem späteren Zeitpunkt einfach erneut.',
@@ -30,6 +32,7 @@ const de = {
   'browse.selectModule': 'Wähle bitte ein Lernmaterial-Modul aus!',
   'browse.loadFailed': 'Die Module konnten nicht geladen werden. Bitte lade die Seite neu.',
   'browse.linksFailed': 'Die Links konnten nicht verschickt werden. Bitte versuche es später erneut.',
+  'browse.rateLimited': 'Du hast in der letzten Stunde zu viele Links angefordert. Bitte versuche es später erneut.',
   'browse.search': 'Module durchsuchen',
   'browse.onlyRecent': 'Nur kürzlich aktualisierte',
   'browse.new': 'Neu',
@@ -83,9 +86,11 @@ const en: Record<keyof typeof de, string> = {
   'signup.submit': 'Request access',
   'signup.rateLimited': 'Too many requests. Please try again in 15 minutes.',
   'signup.failed': 'Sign-up failed. Please try again later.',
+  'signup.linkExpired': 'Your access link has expired. Links are valid for 180 days – just request a new one here.',
+  'signup.linkInvalid': 'Your access link is invalid. Check that you copied it completely, or request a new one here.',
 
   'thanks.title': 'Thank you!',
-  'thanks.text': 'You will now receive an email with your personal link. This link always takes you to the study material distribution, so you can always get the latest materials.',
+  'thanks.text': 'You will now receive an email with your personal link. For 180 days, this link takes you to the study material distribution, so you can always get the latest materials. After that, you can simply request a new link.',
   'thanks.mailbox': 'Go to university webmail',
 
   'browse.intro': 'Select all folders you would like to get study materials for. We will then email you links that are valid for 7 days. Please download the documents in time, or simply request the links again later.',
@@ -93,6 +98,7 @@ const en: Record<keyof typeof de, string> = {
   'browse.selectModule': 'Please select a module!',
   'browse.loadFailed': 'The modules could not be loaded. Please reload the page.',
   'browse.linksFailed': 'The links could not be sent. Please try again later.',
+  'browse.rateLimited': 'You have requested too many links in the last hour. Please try again later.',
   'browse.search': 'Search modules',
   'browse.onlyRecent': 'Recently updated only',
   'browse.new': 'New',
