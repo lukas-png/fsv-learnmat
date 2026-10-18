@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsString, ValidateNested } from 'class-validator';
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsIn, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { LANGUAGES, Language } from '@utils/mail-texts';
 
 export class ListMaterialDto {
   @IsString()
@@ -16,4 +17,8 @@ export class GetLinksDto {
   @ValidateNested({ each: true })
   @Type(() => ListMaterialDto)
   public modules: ListMaterialDto[];
+
+  @IsOptional()
+  @IsIn(LANGUAGES)
+  public lang?: Language;
 }

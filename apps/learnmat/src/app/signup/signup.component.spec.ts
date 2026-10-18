@@ -9,6 +9,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { SignupComponent } from './signup.component';
+import { LanguageService } from '../i18n/language.service';
+import { TranslatePipe } from '../i18n/translate.pipe';
 
 describe('SignupComponent', () => {
   let fixture: ComponentFixture<SignupComponent>;
@@ -22,12 +24,13 @@ describe('SignupComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [SignupComponent],
-      imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule, NoopAnimationsModule],
+      imports: [TranslatePipe, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule, NoopAnimationsModule],
       providers: [
         { provide: AuthService, useValue: auth },
         { provide: Router, useValue: router },
       ],
     }).compileComponents();
+    TestBed.inject(LanguageService).set('de');
 
     fixture = TestBed.createComponent(SignupComponent);
     component = fixture.componentInstance;
@@ -82,6 +85,17 @@ describe('SignupComponent', () => {
     await component.signup();
 
     expect(snackBar).toHaveBeenCalledWith(expect.stringContaining('nicht geklappt'), 'Okay', expect.anything());
+  });
+
+  it('switches the texts when the language changes', () => {
+    const title = () => fixture.nativeElement.querySelector('h1').textContent.trim();
+    expect(title()).toBe('Anmeldung zum Lernmaterial-Verteiler');
+
+    TestBed.inject(LanguageService).set('en');
+    fixture.detectChanges();
+
+    expect(title()).toBe('Sign up for the study material distribution');
+    expect(button().textContent.trim()).toBe('Request access');
   });
 
   it('disables the button while the request is running', async () => {

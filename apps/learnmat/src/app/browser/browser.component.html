@@ -1,14 +1,11 @@
 <div class="container">
     <div class="browser">
         <p>
-            Hier kannst du dir alle Ordner aussuchen für die du Lernmaterial bekommen möchtest.
-            Wir schicken dir anschließend entsprechende Links per Mail, die 7 Tage lang gültig sind. 
-            Bitte lade dir die Dokumente herunter oder beantrage die Links zu einem späteren Zeitpunkt 
-            einfach erneut.
+            {{ 'browse.intro' | t }}
         </p>
         <div>
             <button mat-raised-button color="primary" [disabled]="loading" (click)="getLinks()">
-                Links erhalten
+                {{ 'browse.getLinks' | t }}
             </button>
         </div>
         
@@ -22,7 +19,7 @@
         
         <div>
             <button mat-raised-button color="primary" [disabled]="loading" (click)="getLinks()">
-                Links erhalten
+                {{ 'browse.getLinks' | t }}
             </button>
         </div>
     </div>

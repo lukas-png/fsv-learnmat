@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { LanguageService } from '../i18n/language.service';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class SignupComponent {
   private router = inject(Router);
   private auth = inject(AuthService);
   private snackBar = inject(MatSnackBar);
+  private language = inject(LanguageService);
 
   public signupForm = new FormGroup({
     email: new FormControl('', {
@@ -41,9 +43,9 @@ export class SignupComponent {
       this.router.navigate(['thanks']);
     } catch (error) {
       const message = error instanceof HttpErrorResponse && error.status === 429
-        ? "Zu viele Anfragen. Bitte versuche es in 15 Minuten erneut."
-        : "Die Anmeldung hat nicht geklappt. Bitte versuche es später erneut.";
-      this.snackBar.open(message, "Okay", { duration: 5000 });
+        ? this.language.t('signup.rateLimited')
+        : this.language.t('signup.failed');
+      this.snackBar.open(message, this.language.t('common.ok'), { duration: 5000 });
     } finally {
       this.loading = false;
     }

@@ -1,33 +1,30 @@
 <div class="container">
     <div class="form">
         <h1>
-            Anmeldung zum Lernmaterial-Verteiler
+            {{ 'signup.title' | t }}
         </h1>
         <p>
-            Auf dieser Seite kannst du dich mit deiner Uni-Mail für Lernmaterialien der 
-            Fachschaft Informatik anmelden. Du erhältst anschließend eine Mail mit einem 
-            personalisierten Zugang. Wir speichern keinerlei Informationen von dir! Deine
-            E-Mail-Adresse wird lediglich zur Validierung und für den Versand benötigt.
+            {{ 'signup.intro' | t }}
         </p>
 
         <form [formGroup]="signupForm" autocomplete="off" novalidate (ngSubmit)="signup()">
             <mat-form-field class="email-field">
-                <mat-label>Uni-Mail-Adresse</mat-label>
+                <mat-label>{{ 'signup.emailLabel' | t }}</mat-label>
                 <input type="email" matInput formControlName="email" placeholder="max.mustermann@uni-hildesheim.de" email>
-                <mat-hint>Gib bitte deine E-Mail Adresse der Uni an.</mat-hint>
+                <mat-hint>{{ 'signup.emailHint' | t }}</mat-hint>
                 <mat-error *ngIf="hasError('email', 'required')">
-                    Die E-Mail-Adresse <strong>muss</strong> angegeben werden!
+                    {{ 'signup.errorRequired' | t }}
                 </mat-error>
                 <mat-error *ngIf="!hasError('email', 'required') && hasError('email', 'pattern') && !hasError('email', 'email')">
-                    Bitte verwende deine Uni-E-Mail-Adresse!
+                    {{ 'signup.errorPattern' | t }}
                 </mat-error>
                 <mat-error *ngIf="!hasError('email', 'required') && hasError('email', 'email')">
-                    Bitte gib eine gültige E-Mail-Adresse ein
+                    {{ 'signup.errorEmail' | t }}
                 </mat-error>
             </mat-form-field>
-    
+
             <div class="actions">
-                <button mat-raised-button color="primary" [disabled]="!signupForm.valid || loading">Zugang beantragen</button>
+                <button mat-raised-button color="primary" [disabled]="!signupForm.valid || loading">{{ 'signup.submit' | t }}</button>
             </div>
         </form>
     </div>

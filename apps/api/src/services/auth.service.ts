@@ -5,6 +5,7 @@ import HttpException from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import { isEmpty, isUniMail } from '@utils/util';
+import { accessMail } from '@utils/mail-texts';
 import MailService from './mail.service';
 
 class AuthService {
@@ -21,13 +22,8 @@ class AuthService {
     const tokenData = this.createToken(createdUser);
 
     const mail = new MailService();
-    await mail.mail(createdUser.email, "Dein Lernmaterial-Verteiler Zugang", "Hallo " + createdUser.email 
-      + ", \n\nmit dem folgenden Link erhältst du deinen persönlichen Zugang zur Lernmaterial-Sammlung "
-      + "\nder Fachschaft Informatik. Behalte diese E-Mail gut auf, da du nur mit diesem Link Zugang zur "
-      + "\nSammlung erhältst. Solltest du den Link trotzdem mal verlieren, kannst du dir ebenfalls einen "
-      + "\nneuen zuschicken lassen. "
-      + "\n\nDein Link lautet: \n\n " + config.get('domain') + "/browse?token=" + tokenData.token 
-      + "\n\nViele Grüße,\ndeine Informatik Fachschaft 💻!");
+    const { subject, text } = accessMail(userData.lang ?? 'de', createdUser.email, config.get('domain') + "/browse?token=" + tokenData.token);
+    await mail.mail(createdUser.email, subject, text);
 
     return { userInfo: createdUser };
   }

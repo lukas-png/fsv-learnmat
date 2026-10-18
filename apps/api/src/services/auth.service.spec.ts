@@ -31,6 +31,15 @@ describe('AuthService', () => {
       expect(jwt.verify(token, 'test-secret')).toMatchObject({ email: 'max@uni-hildesheim.de' });
     });
 
+    it('writes the mail in German by default and in English on request', async () => {
+      await service.signup({ email: 'max@uni-hildesheim.de' });
+      await service.signup({ email: 'max@uni-hildesheim.de', lang: 'en' });
+
+      expect(mockMail.mock.calls[0][1]).toBe('Dein Lernmaterial-Verteiler Zugang');
+      expect(mockMail.mock.calls[1][1]).toBe('Your access to the study material distribution');
+      expect(mockMail.mock.calls[1][2]).toContain('Your link:');
+    });
+
     it('rejects non-university addresses without sending a mail', async () => {
       await expect(service.signup({ email: 'max@gmail.com' })).rejects.toMatchObject({ status: 400 });
       expect(mockMail).not.toHaveBeenCalled();
