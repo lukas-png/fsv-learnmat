@@ -56,13 +56,25 @@ Die Konfiguration kommt aus Umgebungsvariablen (Zuordnung in `apps/api/src/confi
 ### AcademicCloud Struktur
 
 ```
-/altklausuren/
+/altklausuren/          ← Module (Ordner direkt hierunter)
 ├── Algorithmen und Datenstrukturen/
 ├── Datenbanken/
 └── ...
+/einreichungen/         ← Hochgeladenes Material (Beta), wird automatisch angelegt
+/statistik/             ← Anonyme Nutzungsstatistik, eine CSV pro Monat
 ```
 
-Nur Ordner direkt unter `/altklausuren` werden als Module angezeigt.
+Nur Ordner direkt unter `/altklausuren` werden als Module angezeigt. Das Änderungsdatum eines Ordners wird als „Aktualisiert am …“ angezeigt; Module, die sich in den letzten 30 Tagen geändert haben, bekommen eine „Neu“-Markierung.
+
+---
+
+## Funktionen
+
+- **Deutsch/Englisch:** Umschalter im Header, Standard nach Browsersprache. Mails werden in der gewählten Sprache verschickt. Texte stehen in `apps/learnmat/src/app/i18n/translations.ts` und `apps/api/src/utils/mail-texts.ts`.
+- **Suche und Filter** in der Modulliste, Auswahl bleibt beim Filtern erhalten.
+- **Material einreichen (Beta):** Unter `/submit` (verlinkt aus der Modulliste) können Studierende PDF, JPG oder PNG bis 20 MB hochladen. Die Dateien landen anonym in `/einreichungen` als `<Datum>_<Modul>_<Zufall>.<Endung>`, eine optionale Notiz als `.txt` daneben. Die Fachschaft prüft sie und verschiebt freigegebenes Material selbst nach `/altklausuren`. Limit: 10 Uploads pro Stunde und IP.
+- **Anonyme Statistik:** `/statistik/JJJJ-MM.csv` mit den Spalten `typ;name;anzahl` (`anmeldung` je Sprache, `modul` je angefragtem Modul, `einreichung` je Modul). Nur Monatssummen, keine personenbezogenen Daten. Wird alle 10 Minuten und beim Stoppen des Containers geschrieben.
+- **Impressum und Datenschutz:** Impressum verlinkt auf den AStA, die Datenschutzerklärung liegt unter `/datenschutz`.
 
 ---
 
