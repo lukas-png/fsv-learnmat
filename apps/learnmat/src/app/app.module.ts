@@ -20,6 +20,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { TranslatePipe } from './i18n/translate.pipe';
 import { SubmitComponent } from './submit/submit.component';
+import { PrivacyComponent } from './privacy/privacy.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -27,7 +28,8 @@ import { SubmitComponent } from './submit/submit.component';
         BrowserComponent,
         ThanksComponent,
         SuccessComponent,
-        SubmitComponent
+        SubmitComponent,
+        PrivacyComponent
     ],
     bootstrap: [AppComponent],
     schemas: [

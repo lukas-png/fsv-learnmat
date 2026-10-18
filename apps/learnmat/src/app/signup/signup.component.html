@@ -5,6 +5,7 @@
         </h1>
         <p>
             {{ 'signup.intro' | t }}
+            <a routerLink="/datenschutz">{{ 'signup.privacy' | t }}</a>
         </p>
 
         <form [formGroup]="signupForm" autocomplete="off" novalidate (ngSubmit)="signup()">

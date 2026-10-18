@@ -165,3 +165,8 @@ html {
 
 html, body { height: 100%; }
 body { top: -20px; margin: 0; font-family: 'Roboto', sans-serif; }
+
+/* Links in the brand green (Material buttons rendered as links keep their own colors) */
+a {
+  color: #5fa42b;
+}

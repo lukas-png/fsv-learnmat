@@ -1,0 +1,126 @@
+<div class="container">
+  <article class="privacy">
+    @if (language.lang() === 'de') {
+      <h1>Datenschutzerklärung</h1>
+      <p class="meta">Stand: Oktober 2026</p>
+
+      <h2>Verantwortliche Stelle</h2>
+      <p>
+        Der Lernmaterial-Verteiler wird von der Fachschaft Informatik betrieben. Verantwortlich im Sinne der DSGVO ist der
+        Allgemeine Studierendenausschuss (AStA) der Stiftung Universität Hildesheim. Die Kontaktdaten findest du im
+        <a [href]="imprintUrl" target="_blank" rel="noopener">Impressum des AStA</a>.
+        Ergänzend gilt die <a [href]="astaPrivacyUrl" target="_blank" rel="noopener">Datenschutzerklärung des AStA</a>.
+      </p>
+
+      <h2>Anmeldung</h2>
+      <p>
+        Wenn du dich anmeldest, verwenden wir deine Uni-Mail-Adresse, um dir einen persönlichen Zugangslink über den
+        Mailserver der Universität Hildesheim zu schicken. Wir speichern deine Adresse nicht in einer Datenbank. Der Link
+        enthält deine E-Mail-Adresse in signierter, aber nicht verschlüsselter Form. Gib ihn deshalb nicht weiter.
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Bereitstellung des von dir angefragten Dienstes).
+      </p>
+
+      <h2>Anfrage von Lernmaterial</h2>
+      <p>
+        Wenn du Module auswählst, erstellen wir in der AcademicCloud der GWDG (Gesellschaft für wissenschaftliche
+        Datenverarbeitung mbH Göttingen) für 7 Tage gültige Freigabelinks und schicken sie an deine Uni-Mail-Adresse.
+        Deine Adresse wird dabei nicht gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.
+      </p>
+
+      <h2>Einreichungen (Beta)</h2>
+      <p>
+        Hochgeladene Dateien und die optionale Notiz werden in der AcademicCloud gespeichert und von der Fachschaft
+        geprüft. Wir speichern dazu weder deinen Namen noch deine E-Mail-Adresse. Bitte entferne persönliche Angaben aus
+        der Datei, bevor du sie hochlädst. Nicht verwendbare Einreichungen werden gelöscht.
+      </p>
+
+      <h2>Server-Protokolle</h2>
+      <p>
+        Bei jedem Aufruf protokolliert der Server IP-Adresse, Zeitpunkt, aufgerufene Adresse, Statuscode und die Angabe
+        deines Browsers. Zugangslinks werden dabei unkenntlich gemacht. Die Protokolle dienen dem sicheren Betrieb und der
+        Abwehr von Missbrauch und werden nach 30 Tagen automatisch gelöscht. Zur Begrenzung von Anfragen wird die
+        IP-Adresse zusätzlich bis zu einer Stunde im Arbeitsspeicher gehalten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.
+      </p>
+
+      <h2>Nutzungsstatistik</h2>
+      <p>
+        Wir zählen, wie oft sich Personen anmelden, welche Module angefragt und wie viele Dateien eingereicht werden.
+        Gespeichert werden nur monatliche Summen, ohne E-Mail-Adressen, IP-Adressen oder Zeitpunkte. Ein Rückschluss auf
+        einzelne Personen ist damit nicht möglich.
+      </p>
+
+      <h2>Cookies, Tracking und externe Inhalte</h2>
+      <p>
+        Wir verwenden keine Cookies und kein Tracking. Schriften werden von unserem eigenen Server geladen. Im Speicher
+        deines Browsers (localStorage) merken wir uns nur die gewählte Sprache.
+      </p>
+
+      <h2>Deine Rechte</h2>
+      <p>
+        Du hast das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung sowie das Recht,
+        der Verarbeitung zu widersprechen. Wende dich dazu an den AStA. Außerdem kannst du dich bei der Landesbeauftragten
+        für den Datenschutz Niedersachsen beschweren.
+      </p>
+    } @else {
+      <h1>Privacy policy</h1>
+      <p class="meta">As of October 2026. The German version is legally binding.</p>
+
+      <h2>Controller</h2>
+      <p>
+        The study material distribution is run by the Computer Science student council. The controller under the GDPR is
+        the General Students' Committee (AStA) of the Stiftung Universität Hildesheim. Contact details are in the
+        <a [href]="imprintUrl" target="_blank" rel="noopener">AStA imprint</a>. The
+        <a [href]="astaPrivacyUrl" target="_blank" rel="noopener">AStA privacy policy</a> applies in addition.
+      </p>
+
+      <h2>Sign-up</h2>
+      <p>
+        When you sign up, we use your university email address to send you a personal access link via the mail server of
+        the University of Hildesheim. We do not store your address in a database. The link contains your email address in
+        signed but not encrypted form, so please do not share it. Legal basis: Art. 6(1)(b) GDPR (providing the service you
+        requested).
+      </p>
+
+      <h2>Requesting study materials</h2>
+      <p>
+        When you select modules, we create share links valid for 7 days in the AcademicCloud of the GWDG (Gesellschaft für
+        wissenschaftliche Datenverarbeitung mbH Göttingen) and send them to your university email address. Your address is
+        not stored. Legal basis: Art. 6(1)(b) GDPR.
+      </p>
+
+      <h2>Submissions (beta)</h2>
+      <p>
+        Uploaded files and the optional note are stored in the AcademicCloud and reviewed by the student council. We store
+        neither your name nor your email address with them. Please remove personal data from the file before uploading it.
+        Submissions that cannot be used are deleted.
+      </p>
+
+      <h2>Server logs</h2>
+      <p>
+        For every request, the server logs the IP address, time, requested address, status code and your browser's user
+        agent. Access links are masked. The logs serve secure operation and abuse prevention and are deleted automatically
+        after 30 days. For rate limiting, the IP address is also kept in memory for up to one hour. Legal basis:
+        Art. 6(1)(f) GDPR.
+      </p>
+
+      <h2>Usage statistics</h2>
+      <p>
+        We count how often people sign up, which modules are requested and how many files are submitted. Only monthly
+        totals are stored, without email addresses, IP addresses or times, so no conclusions about individuals are possible.
+      </p>
+
+      <h2>Cookies, tracking and external content</h2>
+      <p>
+        We use no cookies and no tracking. Fonts are loaded from our own server. Your browser's storage (localStorage)
+        only keeps your language choice.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        You have the right to access, rectification, erasure and restriction of processing, and the right to object to
+        processing. Please contact the AStA. You can also lodge a complaint with the data protection authority of Lower
+        Saxony (Die Landesbeauftragte für den Datenschutz Niedersachsen).
+      </p>
+    }
+  </article>
+</div>

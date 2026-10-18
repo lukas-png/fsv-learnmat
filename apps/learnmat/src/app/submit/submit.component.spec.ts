@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { ActivatedRoute, RouterLink, convertToParamMap, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { LanguageService } from '../i18n/language.service';
 import { TranslatePipe } from '../i18n/translate.pipe';
@@ -32,7 +32,7 @@ describe('SubmitComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [SubmitComponent],
-      imports: [TranslatePipe, FormsModule, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, NoopAnimationsModule],
+      imports: [TranslatePipe, RouterLink, FormsModule, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, NoopAnimationsModule],
       providers: [
         provideRouter([]),
         { provide: ModulesService, useValue: modulesService },

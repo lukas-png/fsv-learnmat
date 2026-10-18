@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.privacy {
+    width: 763px;
+    min-width: 0;
+}
+
+.meta {
+    color: #6b6b6b;
+}
+
+h2 {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+}
+
+a {
+    color: #5fa42b;
+}
