@@ -2,9 +2,7 @@ import config from 'config';
 import { createClient, WebDAVClient } from 'webdav';
 import { logger } from '@utils/logger';
 
-// Anonymous usage statistics: only monthly totals per category and name, never
-// email addresses, IPs or timestamps. Stored as /statistik/YYYY-MM.csv in the
-// AcademicCloud so the student council can open them where the materials live.
+// Anonymous usage statistics: monthly totals per category and name
 
 export type StatsCategory = 'anmeldung' | 'modul' | 'einreichung';
 
