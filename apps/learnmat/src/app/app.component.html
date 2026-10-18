@@ -18,3 +18,8 @@
 <div class="content">
   <router-outlet></router-outlet>
 </div>
+
+<footer>
+  <a [href]="imprintUrl" target="_blank" rel="noopener">{{ 'footer.imprint' | t }}</a>
+  <a routerLink="/datenschutz">{{ 'footer.privacy' | t }}</a>
+</footer>

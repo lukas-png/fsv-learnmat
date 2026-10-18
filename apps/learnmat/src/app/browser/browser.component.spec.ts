@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, RouterLink, convertToParamMap, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ModulesService } from '../modules.service';
 import { SuccessComponent } from '../success/success.component';
@@ -28,8 +28,9 @@ describe('BrowserComponent', () => {
   const setup = async () => {
     await TestBed.configureTestingModule({
       declarations: [BrowserComponent],
-      imports: [TranslatePipe, FormsModule, MatListModule, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, NoopAnimationsModule],
+      imports: [TranslatePipe, RouterLink, FormsModule, MatListModule, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, NoopAnimationsModule],
       providers: [
+        provideRouter([]),
         { provide: ModulesService, useValue: modulesService },
         { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap({ token: 'abc' }) } } },
       ],
