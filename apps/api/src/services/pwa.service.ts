@@ -2,10 +2,7 @@ import config from 'config';
 import * as cheerio from 'cheerio';
 
 // Looks up a uni member in the PWA directory, intended to tell staff and students apart.
-// Not wired into any route yet. Before using it for real:
-// - the PWA login sends the password as a URL query parameter, which may end up in server logs
-// - clarify with the university IT whether automated directory lookups are allowed
-// - the signup page states that no personal data is stored; update it accordingly
+// Not wired into any route yet.
 class PwaService {
 
     cookie: string;
