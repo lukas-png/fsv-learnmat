@@ -7,9 +7,18 @@ import AuthRoute from '@routes/auth.route';
 import IndexRoute from '@routes/index.route';
 import validateEnv from '@utils/validateEnv';
 import ModulesRoute from '@routes/modules.route';
+import { statsService } from '@services/stats.service';
 
 validateEnv();
 
 const app = new App([new IndexRoute(), new AuthRoute(), new ModulesRoute()]);
 
 app.listen();
+statsService.start();
+
+// Write pending statistics before the container stops
+for (const signal of ['SIGTERM', 'SIGINT'] as const) {
+  process.once(signal, () => {
+    statsService.stop().finally(() => process.exit(0));
+  });
+}

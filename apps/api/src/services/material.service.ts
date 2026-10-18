@@ -5,6 +5,7 @@ import config from 'config';
 import { createClient, WebDAVClient } from "webdav";
 
 import MailService from './mail.service';
+import { statsService } from './stats.service';
 
 const MATERIAL_DIR = "/altklausuren";
 const SHARE_DAYS = 7;
@@ -66,6 +67,7 @@ class MaterialService {
 
         const { subject, text } = linksMail(lang, linksFormatted, expire);
         await mail.mail(email, subject, text);
+        selectedFiles.forEach(file => statsService.record('modul', file.basename));
     }
 
     // Creates a public link share (shareType=3) via the OCS API of the same server as accHost
