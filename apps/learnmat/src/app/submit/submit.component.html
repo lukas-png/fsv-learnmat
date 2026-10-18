@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="submit">
+        <h1>{{ 'submit.title' | t }} <span class="beta">Beta</span></h1>
+        <p>{{ 'submit.intro' | t }}</p>
+
+        <div class="rules">
+            <strong>{{ 'submit.rules' | t }}</strong>
+            <ul>
+                <li>{{ 'submit.rule1' | t }}</li>
+                <li>{{ 'submit.rule2' | t }}</li>
+                <li>{{ 'submit.rule3' | t }}</li>
+            </ul>
+        </div>
+
+        <form (ngSubmit)="submit()" autocomplete="off">
+            <mat-form-field class="field">
+                <mat-label>{{ 'submit.module' | t }}</mat-label>
+                <input matInput name="module" [(ngModel)]="module" list="module-options" maxlength="200">
+                <mat-hint>{{ 'submit.moduleHint' | t }}</mat-hint>
+            </mat-form-field>
+            <datalist id="module-options">
+                @for (option of modules; track option.name) {
+                    <option [value]="option.name"></option>
+                }
+            </datalist>
+
+            <div class="file">
+                <input #fileInput type="file" hidden accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                       (change)="onFileSelected($event)">
+                <button mat-stroked-button color="primary" type="button" (click)="fileInput.click()">{{ 'submit.chooseFile' | t }}</button>
+                <span class="file-name">
+                    @if (file) {
+                        {{ file.name }} ({{ fileSize }})
+                    } @else {
+                        {{ 'submit.noFile' | t }}
+                    }
+                </span>
+            </div>
+
+            <mat-form-field class="field">
+                <mat-label>{{ 'submit.note' | t }}</mat-label>
+                <textarea matInput name="note" [(ngModel)]="note" maxlength="2000" rows="3"></textarea>
+                <mat-hint>{{ 'submit.noteHint' | t }}</mat-hint>
+            </mat-form-field>
+
+            <mat-checkbox color="primary" name="consent" [(ngModel)]="consent" class="consent">{{ 'submit.consent' | t }}</mat-checkbox>
+
+            <div class="actions">
+                <button mat-raised-button color="primary" type="submit" [disabled]="!file || !consent || loading">{{ 'submit.submit' | t }}</button>
+                <a routerLink="/browse" [queryParams]="{ token: token }">{{ 'submit.back' | t }}</a>
+            </div>
+        </form>
+    </div>
+</div>

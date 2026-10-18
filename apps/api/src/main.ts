@@ -7,11 +7,12 @@ import AuthRoute from '@routes/auth.route';
 import IndexRoute from '@routes/index.route';
 import validateEnv from '@utils/validateEnv';
 import ModulesRoute from '@routes/modules.route';
+import SubmissionsRoute from '@routes/submissions.route';
 import { statsService } from '@services/stats.service';
 
 validateEnv();
 
-const app = new App([new IndexRoute(), new AuthRoute(), new ModulesRoute()]);
+const app = new App([new IndexRoute(), new AuthRoute(), new ModulesRoute(), new SubmissionsRoute()]);
 
 app.listen();
 statsService.start();

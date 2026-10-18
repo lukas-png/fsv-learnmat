@@ -76,6 +76,13 @@ html {
     subscript-text-tracking: 0.03em,
   ));
 
+  @include mat.checkbox-overrides((
+    label-text-size: 0.9rem,
+    label-text-line-height: 1.4,
+    label-text-weight: 400,
+    label-text-tracking: normal,
+  ));
+
   @include mat.list-overrides((
     list-item-label-text-size: 16px,
     list-item-focus-state-layer-opacity: 0.04,
@@ -98,6 +105,11 @@ html {
 
 .mat-mdc-form-field .mat-mdc-form-field-focus-overlay {
   display: none;
+}
+
+/* Without the filled padding, the floating label would touch the first line of a textarea */
+.mat-mdc-form-field textarea.mat-mdc-input-element {
+  margin-top: 0.4rem;
 }
 
 /* Long module names wrap instead of being truncated. */

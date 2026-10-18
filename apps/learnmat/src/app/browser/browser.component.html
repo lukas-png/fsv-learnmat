@@ -45,5 +45,10 @@
                 {{ 'browse.getLinks' | t }}
             </button>
         </div>
+
+        <p class="submit-link">
+            <a routerLink="/submit" [queryParams]="{ token: token }">{{ 'browse.submitLink' | t }}</a>
+            <span class="beta">Beta</span>
+        </p>
     </div>
 </div>
