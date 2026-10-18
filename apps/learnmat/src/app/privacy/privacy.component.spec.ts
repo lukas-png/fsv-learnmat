@@ -23,7 +23,11 @@ describe('PrivacyComponent', () => {
     const element = render(lang);
 
     expect(element.querySelector('h1')?.textContent).toBe(title);
-    expect(element.querySelectorAll('h2').length).toBe(8);
+    expect(element.querySelectorAll('h2').length).toBe(12);
+  });
+
+  it.each(['de', 'en'] as const)('contains no unfilled placeholders like [PLACEHOLDER] (%s)', lang => {
+    expect(render(lang).textContent).not.toMatch(/\[[A-ZÄÖÜ ]{3,}\]/);
   });
 
   it('links to the AStA imprint in a new tab', () => {
