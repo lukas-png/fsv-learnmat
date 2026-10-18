@@ -93,6 +93,27 @@ Passwortlos — Authentifizierung ausschließlich über JWT-Links.
 
 ---
 
+## Versionen und Images
+
+Die CI baut das Docker-Image und veröffentlicht es in der GitHub Container Registry (`ghcr.io/lukas-png/fsv-learnmat`):
+
+| Auslöser | Image-Tags |
+|---|---|
+| Push auf `main` | `latest` |
+| Git-Tag `vX.Y.Z` | `X.Y.Z` und `X.Y` |
+| Pull Request | nur Build, kein Push |
+
+Ein Release entsteht durch einen Tag auf dem gewünschten Commit in `main`:
+
+```bash
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+Im Deployment kann man dann statt `latest` eine feste Version (`1.2.0`) oder eine Minor-Linie (`1.2`, bekommt Patch-Releases) verwenden.
+
+---
+
 ## GitHub Secrets
 
 Für den CI/CD-Workflow werden folgende Secrets benötigt:

@@ -56,6 +56,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Versioning as in student-management-form: pushes to main publish :latest,
+      # a git tag vX.Y.Z publishes :X.Y.Z and :X.Y. Deployments pin one of them.
       - name: Extract metadata (tags & labels)
         id: meta
         uses: docker/metadata-action@v5
@@ -65,28 +67,9 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=sha,prefix=sha-
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Cache npm
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: npm-cache
-          key: buildkit-npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            buildkit-npm-
-
-      - name: Inject npm cache into Docker build
-        uses: reproducible-containers/buildkit-cache-dance@v3
-        with:
-          cache-map: |
-            {
-              "npm-cache": "/root/.npm"
-            }
-          skip-extraction: ${{ steps.cache.outputs.cache-hit }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -95,5 +78,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=ghcr.io/${{ env.REPO_LC }}:buildcache
-          cache-to: ${{ github.event_name != 'pull_request' && format('type=registry,ref=ghcr.io/{0}:buildcache,mode=max', env.REPO_LC) || '' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

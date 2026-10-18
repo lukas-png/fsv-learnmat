@@ -5,5 +5,4 @@ dist
 .git
 .env
 *.pem
-npm-cache
 
