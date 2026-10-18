@@ -7,6 +7,7 @@ import { User } from '@interfaces/users.interface';
 import { isEmpty, isUniMail } from '@utils/util';
 import { accessMail } from '@utils/mail-texts';
 import MailService from './mail.service';
+import { statsService } from './stats.service';
 
 class AuthService {
 
@@ -22,8 +23,10 @@ class AuthService {
     const tokenData = this.createToken(createdUser);
 
     const mail = new MailService();
-    const { subject, text } = accessMail(userData.lang ?? 'de', createdUser.email, config.get('domain') + "/browse?token=" + tokenData.token);
+    const lang = userData.lang ?? 'de';
+    const { subject, text } = accessMail(lang, createdUser.email, config.get('domain') + "/browse?token=" + tokenData.token);
     await mail.mail(createdUser.email, subject, text);
+    statsService.record('anmeldung', lang);
 
     return { userInfo: createdUser };
   }
