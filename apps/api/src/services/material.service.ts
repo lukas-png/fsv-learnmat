@@ -21,6 +21,8 @@ interface OcsShareResponse {
     };
 }
 
+const plainEtag = (etag: string): string => etag.replace(/&quot;|"/g, "");
+
 class MaterialService {
 
     private createWebDavClient(): WebDAVClient {
@@ -40,7 +42,7 @@ class MaterialService {
             const updated = new Date(file.lastmod);
             return {
                 name: file.basename,
-                etag: file.etag.replace("&quot;", "").replace("&quot;", ""),
+                etag: plainEtag(file.etag),
                 updated: isNaN(updated.getTime()) ? undefined : updated.toISOString(),
             };
         });
@@ -50,8 +52,12 @@ class MaterialService {
         const client = this.createWebDavClient();
         const mail = new MailService();
 
-        const files = (await client.getDirectoryContents(MATERIAL_DIR)) as {filename: string, basename: string, etag: string}[];
-        const selectedFiles = files.filter(file => modules.find(f => ("&quot;"+f.etag+"&quot;") === file.etag) !== undefined);
+        const files = (await client.getDirectoryContents(MATERIAL_DIR)) as {filename: string, basename: string, type: string}[];
+        // Matched by name, the folder's ETag changes as soon as a file inside it is added
+        const selectedFiles = files.filter(file => file.type === 'directory' && modules.some(m => m.name === file.basename));
+        if (selectedFiles.length === 0) {
+            throw new HttpException(404, "Die ausgewählten Module wurden nicht gefunden");
+        }
 
         const urls: {name: string, url: string}[] = [];
 

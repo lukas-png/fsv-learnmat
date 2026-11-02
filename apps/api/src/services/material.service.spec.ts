@@ -79,6 +79,22 @@ describe('MaterialService', () => {
     expect(fetchMock.mock.calls[0][0].searchParams.get('expireDate')).toBe(expected.toISOString().slice(0, 10));
   });
 
+  it('finds modules by name even if the etag is unquoted or has changed', async () => {
+    mockGetDirectoryContents.mockResolvedValue(directory.map(f => ({ ...f, etag: f.etag.replace(/&quot;/g, '') + '-new' })));
+    fetchMock.mockResolvedValueOnce(ocsOk('Datenbanken'));
+
+    await service.createShares([{ name: 'Datenbanken', etag: 'db1' }], 'max@uni-hildesheim.de');
+
+    expect(mockMail.mock.calls[0][2]).toContain('Datenbanken ~> https://sync.example.de/s/Datenbanken');
+  });
+
+  it('fails with 404 and sends no mail if no selected module exists', async () => {
+    await expect(service.createShares([{ name: 'Gibt es nicht', etag: 'xyz' }], 'max@uni-hildesheim.de'))
+      .rejects.toMatchObject({ status: 404 });
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(mockMail).not.toHaveBeenCalled();
+  });
+
   it('fails with 502 and sends no mail if the share cannot be created', async () => {
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ ocs: { meta: { status: 'failure' } } }) });
 
